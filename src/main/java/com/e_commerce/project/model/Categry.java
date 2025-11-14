@@ -8,5 +8,5 @@ import lombok.Setter;
 public class Categry {
 
     private Long id;
-    private String Categoryname;
+    private String categoryname;
 }
