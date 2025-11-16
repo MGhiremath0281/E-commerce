@@ -1,5 +1,7 @@
 package com.e_commerce.project.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,4 +18,7 @@ public class Categry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String categoryname;
+    private String description;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

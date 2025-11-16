@@ -1,5 +1,6 @@
 package com.e_commerce.project.service.implementation;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class CategoryserviceImpl implements Categoryservice {
 
     @Override
     public Categry createCategory(Categry categry) {
+        categry.setCreatedAt(LocalDateTime.now());
+        categry.setUpdatedAt(LocalDateTime.now());
         return categoryRepositry.save(categry);
     }
 
@@ -34,6 +37,7 @@ public class CategoryserviceImpl implements Categoryservice {
     public boolean updateCategory(Long id, Categry category) {
         return categoryRepositry.findById(id).map(existingCategory -> {
             existingCategory.setCategoryname(category.getCategoryname());
+            existingCategory.setDescription(category.getDescription());
             categoryRepositry.save(existingCategory);
             return true;
         }).orElse(false);
