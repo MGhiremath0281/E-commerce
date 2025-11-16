@@ -36,14 +36,8 @@ public class CategoryController {
 
     @DeleteMapping("/api/admin/categories/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
-        String result = categoryservice.deleteCategory(id);
-
-        if (result.contains("deleted")) {
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(result);
-        }
+        categoryservice.deleteCategory(id);
+        return ResponseEntity.ok("Category deleted successfully");
     }
 
     @PutMapping("/api/admin/categories/{id}")
