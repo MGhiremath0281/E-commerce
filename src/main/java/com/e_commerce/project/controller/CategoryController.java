@@ -25,13 +25,11 @@ public class CategoryController {
     @Autowired
     private Categoryservice categoryservice;
 
-    // Accessible by everyone (users, vendors, admins)
     @GetMapping
     public ResponseEntity<List<Categry>> getCategories() {
         return ResponseEntity.ok(categoryservice.getCategories());
     }
 
-    // Only Admin can create new categories
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<String> createCategory(@RequestBody Categry category) {
@@ -40,7 +38,6 @@ public class CategoryController {
                 .body("Category added successfully");
     }
 
-    // Only Admin can delete categories
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
@@ -48,7 +45,6 @@ public class CategoryController {
         return ResponseEntity.ok("Category deleted successfully");
     }
 
-    // Both Admin and Vendor can update categories
     @PreAuthorize("hasAnyRole('ADMIN', 'VENDOR')")
     @PutMapping("/{id}")
     public ResponseEntity<String> updateCategory(@PathVariable Long id, @RequestBody Categry category) {
