@@ -18,55 +18,59 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-        @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                http
-                                .csrf(csrf -> csrf.disable())
-                                .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers(
-                                                                "/api/categories/**",
-                                                                "/api/products/**",
-                                                                "/api/cart/**" // added this
-                                                ).permitAll()
-                                                .anyRequest().authenticated())
-                                .formLogin(form -> form
-                                                .loginPage("/login")
-                                                .defaultSuccessUrl("/", true)
-                                                .permitAll())
-                                .logout(logout -> logout
-                                                .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/")
-                                                .permitAll())
-                                .httpBasic(Customizer.withDefaults());
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/api/categories/**",
+                    "/api/products/**",
+                    "/api/cart/**",     // allow cart APIs
+                    "/api/orders/**"    // allow order APIs
+                ).permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .permitAll()
+            )
+            .httpBasic(Customizer.withDefaults());
 
-                return http.build();
-        }
+        return http.build();
+    }
 
-        @Bean
-        public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-                var admin = User.builder()
-                                .username("admin")
-                                .password(passwordEncoder.encode("admin123"))
-                                .roles("ADMIN")
-                                .build();
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+        var admin = User.builder()
+                        .username("admin")
+                        .password(passwordEncoder.encode("admin123"))
+                        .roles("ADMIN")
+                        .build();
 
-                var user = User.builder()
-                                .username("user")
-                                .password(passwordEncoder.encode("user123"))
-                                .roles("USER")
-                                .build();
+        var user = User.builder()
+                       .username("user")
+                       .password(passwordEncoder.encode("user123"))
+                       .roles("USER")
+                       .build();
 
-                var vendor = User.builder()
-                                .username("vendor")
-                                .password(passwordEncoder.encode("vendor123"))
-                                .roles("VENDOR")
-                                .build();
+        var vendor = User.builder()
+                         .username("vendor")
+                         .password(passwordEncoder.encode("vendor123"))
+                         .roles("VENDOR")
+                         .build();
 
-                return new InMemoryUserDetailsManager(admin, user, vendor);
-        }
+        return new InMemoryUserDetailsManager(admin, user, vendor);
+    }
 
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
-        }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
