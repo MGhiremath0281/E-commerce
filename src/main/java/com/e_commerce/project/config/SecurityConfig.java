@@ -23,7 +23,11 @@ public class SecurityConfig {
                 http
                                 .csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/api/categories/**", "/api/products/**").permitAll()
+                                                .requestMatchers(
+                                                                "/api/categories/**",
+                                                                "/api/products/**",
+                                                                "/api/cart/**" // added this
+                                                ).permitAll()
                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form
                                                 .loginPage("/login")
